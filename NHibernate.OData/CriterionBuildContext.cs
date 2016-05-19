@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using NHibernate.SqlCommand;
 
 namespace NHibernate.OData
 {
@@ -12,6 +13,7 @@ namespace NHibernate.OData
         public bool CaseSensitiveResolve { get; private set; }
         public bool CaseSensitiveLike { get; private set; }
         public NameResolver NameResolver { get; private set; }
+        public JoinType JoinType { get; set; }
 
         public int ExpressionLevel
         {
@@ -22,7 +24,7 @@ namespace NHibernate.OData
 
         private readonly Stack<LambdaExpressionContext> _lambdaContextStack = new Stack<LambdaExpressionContext>();
 
-        public CriterionBuildContext(ODataSessionFactoryContext sessionFactoryContext, bool caseSensitiveResolve, bool caseSensitiveLike, NameResolver nameResolver)
+        public CriterionBuildContext(ODataSessionFactoryContext sessionFactoryContext, bool caseSensitiveResolve, bool caseSensitiveLike, NameResolver nameResolver, JoinType joinType = JoinType.InnerJoin)
         {
             Require.NotNull(sessionFactoryContext, "sessionFactoryContext");
             Require.NotNull(nameResolver, "nameResolver");
@@ -31,6 +33,7 @@ namespace NHibernate.OData
             CaseSensitiveResolve = caseSensitiveResolve;
             CaseSensitiveLike = caseSensitiveLike;
             NameResolver = nameResolver;
+            JoinType = joinType;
 
             AliasesByName = new Dictionary<string, Alias>(StringComparer.Ordinal);
         }

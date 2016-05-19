@@ -34,7 +34,8 @@ namespace NHibernate.OData
                 sessionFactoryContext,
                 configuration.CaseSensitive,
                 configuration.CaseSensitiveLike,
-                configuration.NameResolver ?? new NameResolver()
+                configuration.NameResolver ?? new NameResolver(),
+                configuration.OuterJoin ? JoinType.LeftOuterJoin : JoinType.InnerJoin
             );
             _context.AliasesByName.Add(RootAlias, new Alias(RootAlias, string.Empty, _persistentClass));
 

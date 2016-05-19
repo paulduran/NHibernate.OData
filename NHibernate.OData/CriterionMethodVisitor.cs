@@ -124,7 +124,7 @@ namespace NHibernate.OData
             _context.AddAlias(new Alias(lambdaAlias, string.Empty, itemType));
 
             // The inner joined alias to collection items must be created in any case (whether the lambda expression is specified or not)
-            detachedCriteria.CreateAlias(subCriteriaAlias + "." + collectionMemberName, lambdaAlias, JoinType.InnerJoin);
+            detachedCriteria.CreateAlias(subCriteriaAlias + "." + collectionMemberName, lambdaAlias, _context.JoinType);
 
             detachedCriteria.SetProjection(Projections.Constant(1));
 
