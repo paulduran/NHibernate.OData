@@ -57,7 +57,7 @@ namespace NHibernate.OData.Demo
             using (var session = _sessionFactroy.OpenSession())
             using (var transaction = session.BeginTransaction())
             {
-                session.FlushMode = FlushMode.Never;
+                session.FlushMode = FlushMode.Manual;
 
                 request = _service.Query(session, path, filter);
 

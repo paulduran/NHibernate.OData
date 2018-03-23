@@ -37,7 +37,7 @@ namespace NHibernate.OData.Extensions
             this.args = args;
         }
 
-        public override SqlString ToSqlString(ICriteria criteria, int position, ICriteriaQuery criteriaQuery, IDictionary<string, IFilter> enabledFilters)
+        public override SqlString ToSqlString(ICriteria criteria, int position, ICriteriaQuery criteriaQuery)
         {
             SqlStringBuilder sb = new SqlStringBuilder();
             sb.Add("(");
@@ -45,7 +45,7 @@ namespace NHibernate.OData.Extensions
             for (int i = 0; i < args.Length; i++)
             {
                 int loc = (position + 1) * 1000 + i;
-                SqlString projectArg = GetProjectionArgument(criteriaQuery, criteria, args[i], loc, enabledFilters);
+                SqlString projectArg = GetProjectionArgument(criteriaQuery, criteria, args[i], loc);
                 sb.Add(projectArg);
 
                 if (i < args.Length - 1)
@@ -58,10 +58,9 @@ namespace NHibernate.OData.Extensions
         }
 
         private static SqlString GetProjectionArgument(ICriteriaQuery criteriaQuery, ICriteria criteria,
-                                                       IProjection projection, int loc,
-                                                       IDictionary<string, IFilter> enabledFilters)
+                                                       IProjection projection, int loc)
         {
-            SqlString sql = projection.ToSqlString(criteria, loc, criteriaQuery, enabledFilters);
+            SqlString sql = projection.ToSqlString(criteria, loc, criteriaQuery);
             return sql.Substring(0, sql.LastIndexOfCaseInsensitive(" as "));
         }
 
@@ -90,14 +89,14 @@ namespace NHibernate.OData.Extensions
             }
         }
 
-        public override SqlString ToGroupSqlString(ICriteria criteria, ICriteriaQuery criteriaQuery, IDictionary<string, IFilter> enabledFilters)
+        public override SqlString ToGroupSqlString(ICriteria criteria, ICriteriaQuery criteriaQuery)
         {
             SqlStringBuilder buf = new SqlStringBuilder();
             foreach (IProjection projection in args)
             {
                 if (projection.IsGrouped)
                 {
-                    buf.Add(projection.ToGroupSqlString(criteria, criteriaQuery, enabledFilters)).Add(", ");
+                    buf.Add(projection.ToGroupSqlString(criteria, criteriaQuery)).Add(", ");
                 }
             }
             if (buf.Count >= 2)

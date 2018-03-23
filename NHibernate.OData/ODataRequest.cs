@@ -127,10 +127,10 @@ namespace NHibernate.OData
                     }
                     else if (manyToOneType != null)
                     {
-                        var childEntity = parentPersister.GetPropertyValue(parentEntity, property.Name, EntityMode.Poco);
+                        var childEntity = parentPersister.GetPropertyValue(parentEntity, property.Name);
                         var childPersister = _service.GetPersister(property.Type.ReturnedClass);
 
-                        object idValue = childPersister.GetIdentifier(childEntity, EntityMode.Poco);
+                        object idValue = childPersister.GetIdentifier(childEntity);
 
                         criteria.Add(Restrictions.Eq(childPersister.IdentifierPropertyName, idValue));
                     }
@@ -178,7 +178,7 @@ namespace NHibernate.OData
                     ODataService.NsMetadata + "properties"
                 );
 
-                string id = Inflector.Pluralize(entityName) + "(" + LiteralUtil.EscapeValue(persister.GetIdentifier(entity, EntityMode.Poco)) + ")";
+                string id = Inflector.Pluralize(entityName) + "(" + LiteralUtil.EscapeValue(persister.GetIdentifier(entity)) + ")";
 
                 var entryElement = new XElement(
                     ODataService.NsAtom + "entry",
@@ -194,9 +194,9 @@ namespace NHibernate.OData
 
                 feedElement.Add(entryElement);
 
-                propertiesElement.Add(AddProperty(persister.IdentifierPropertyName, persister.IdentifierType, persister.GetIdentifier(entity, EntityMode.Poco)));
+                propertiesElement.Add(AddProperty(persister.IdentifierPropertyName, persister.IdentifierType, persister.GetIdentifier(entity)));
 
-                var values = persister.GetPropertyValues(entity, EntityMode.Poco);
+                var values = persister.GetPropertyValues(entity);
 
                 for (int i = 0; i < values.Length; i++)
                 {
