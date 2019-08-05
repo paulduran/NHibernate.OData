@@ -48,7 +48,7 @@ namespace NHibernate.OData.Demo.Populator
             using (var session = _database.OpenSession())
             using (var transaction = session.BeginTransaction())
             {
-                session.FlushMode = FlushMode.Never;
+                session.FlushMode = FlushMode.Manual;
 
                 var document = XDocument.Load(reader);
 

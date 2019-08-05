@@ -23,7 +23,7 @@ namespace NHibernate.OData
             Require.NotNull(sessionFactory, "sessionFactory");
 
             MappedClassMetadata = sessionFactory.GetAllClassMetadata().Values.ToDictionary(
-                x => x.GetMappedClass(EntityMode.Poco), 
+                x => x.MappedClass, 
                 x => new MappedClassMetadata(x)
             );
         }
