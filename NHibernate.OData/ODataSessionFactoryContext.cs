@@ -22,10 +22,12 @@ namespace NHibernate.OData
         {
             Require.NotNull(sessionFactory, "sessionFactory");
 
-            MappedClassMetadata = sessionFactory.GetAllClassMetadata().Values.ToDictionary(
-                x => x.MappedClass, 
-                x => new MappedClassMetadata(x)
-            );
+            var lookup =
+                sessionFactory.GetAllClassMetadata().Values.ToLookup(
+                    x => x.MappedClass,
+                    x => new MappedClassMetadata(x));
+
+            MappedClassMetadata = lookup.ToDictionary(k => k.Key, v => v.First());
         }
     }
 }
